@@ -1,63 +1,57 @@
+package counter;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.regex.Pattern;
+import java.util.StringTokenizer;
 
-public class test {
+/**
+ *
+ * @author THAYCACAC
+ */
+public class Counter {
 
+    private Map<Character, Integer> charCounter =
+            new HashMap<Character, Integer>();
+
+    private Map<String, Integer> wordCounter =
+            new HashMap<String, Integer>();
+
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter your content: ");
+        String content = scanner.nextLine();
 
-        // Prompt the user to enter a string
-        System.out.print("Enter your content: ");
-        String input = scanner.nextLine();
-
-        // Tạo một HashMap để lưu trữ số lần xuất hiện của từ và ký tự
-        Map<String, Integer> wordCount = new HashMap<>();
-
-        //matches pattern
-        Pattern pattern = Pattern.compile("[\\s\\p{Punct} 0-9]+");
-
-        /*
-        * \\s = " space"  "tab"
-        * \\p{Punct} = special key, .......
-        */
-
-        String[] words = pattern.split(input);
-
-        //put to count the words
-        for (String word : words) {
-            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
-        }
-
-        //display words have been counted
-        System.out.print("(");
-        for (String word : wordCount.keySet()) {
-            System.out.print(word + "=" + wordCount.get(word) + ",");
-        }
-        System.out.println(")");
-        //display character
-        displayLetterCount(input);
-
-        scanner.close();
+        Counter counter = new Counter();
+        counter.analyze(content);
+        counter.display();
     }
-    public static void displayLetterCount(String input) {
 
-        System.out.print("{");
-        for (char c = 'a'; c <= 'z'; c++) {
-            int count = 0;
-            for (int i = 0; i < input.length(); i++) {
-                char inputChar = Character.toLowerCase(input.charAt(i));
-                if (inputChar == c) {
-                    count++;
-                }
-            }
-            if (count > 0) {
-                System.out.print(c + "=" + count + ",");
+    public void display() {
+        System.out.println(wordCounter);
+        System.out.println(charCounter);
+    }
+
+    public void analyze(String content) {
+        for (char ch : content.toCharArray()) {
+            if (Character.isSpaceChar(ch)) continue;
+            if (!charCounter.containsKey(ch)) {
+                charCounter.put(ch, 1);
+            } else {
+                charCounter.put(ch, ((int) charCounter.get(ch)) + 1);
             }
         }
-        System.out.println("}");
+        StringTokenizer tokenizer = new StringTokenizer(content);
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            if (!wordCounter.containsKey(token)) {
+                wordCounter.put(token, 1);
+            } else {
+                wordCounter.put(token, ((int) wordCounter.get(token)) + 1);
+            }
+        }
     }
-    }
-
-
+}
