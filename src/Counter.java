@@ -1,14 +1,10 @@
-package counter;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-/**
- *
- * @author THAYCACAC
- */
+
 public class Counter {
 
     private Map<Character, Integer> charCounter =
